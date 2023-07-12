@@ -1,5 +1,5 @@
-# sof-essx8336-debian-fix
-> Fixes to get ESSX8336 audio working for Intel Gemini Lake systems in Debian
+# sof-essx8336-fedora-fix
+> Fixes to get ESSX8336 audio working for Intel Gemini Lake systems in Debian and Fedora
 
 ## Problem
 I found myself needing to support a new hardware platform for our [GrandCare devices](https://www.grandcare.com/). Everything was working fine,
@@ -28,12 +28,12 @@ Debian friendly, namely by using the sid kernel source to build the updated kern
 **WARNING** - *You are about to install a new kernel from the unstable branch of Debian. This may render your system unusable if something doesn't
 like your hardware. Make sure you do proper backups and know how to boot from an older kernel before you proceed.*
 
-These instructions were tested on Debian 10 (buster). This might work for other versions (bullseye) or Debian derivs (mint, ubuntu, etc), but YMMV.
+These instructions were tested on Debian 10 (buster) and Fedora 38. This might work for other versions (bullseye) or Debian derivs (mint, ubuntu, nobara, etc), but YMMV.
 
 1. Install some packages you'll need for installation:
 
    ```
-   sudo apt-get install git rsync
+   sudo dnf install git rsync
    ```
 2. Clone this repository:
 
@@ -44,14 +44,21 @@ These instructions were tested on Debian 10 (buster). This might work for other 
 
    ```
    cd sof-essx8336-debian-fix
-   sudo dpkg -i dist/linux*
    ```
-4. Install correct sof firmware and topologies
+4. Remove folders and Create file:
+
+   ```
+   sudo rm -rf /lib/firmware/intel/sof
+   sudo rm -rf /lib/firmware/intel/sof-tplg
+   sudo touch /etc/pulse/default.pa
+   ```
+   
+5. Install correct sof firmware and topologies
 
    ```
    sudo ./setup-sof.sh
    ```
-5. Reboot into the new kernel:
+6. Reboot into the new kernel:
 
    ```
    sudo shutdown -r now
